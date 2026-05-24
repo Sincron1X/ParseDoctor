@@ -16,6 +16,7 @@ export default function ParseDoctorLanding() {
   }
   
   async function testConnection() {
+
     const reportCode = extractReportCode(logUrl);
   
     if (!reportCode) {
@@ -35,7 +36,22 @@ export default function ParseDoctorLanding() {
       alert("Failed to fetch Warcraft Logs report.");
     }
   }
-
+  
+  function groupFightsByBoss(fights: any[]) {
+    const grouped: Record<string, any[]> = {};
+  
+    fights.forEach((fight) => {
+      const bossName = fight.name || "Unknown";
+  
+      if (!grouped[bossName]) {
+        grouped[bossName] = [];
+      }
+  
+      grouped[bossName].push(fight);
+    });
+  
+    return grouped;
+  }
 
   return (
     <div className="min-h-screen bg-[#070812] text-white overflow-hidden">
@@ -71,32 +87,49 @@ export default function ParseDoctorLanding() {
     </p>
 
     <div className="mt-6 space-y-3">
-    {reportData.fights
-  .filter((fight: any) => fight.difficulty)
-  .map((fight: any, index: number) => {
-    const durationMs = fight.endTime - fight.startTime;
-    const minutes = Math.floor(durationMs / 60000);
-    const seconds = Math.floor((durationMs % 60000) / 1000);
+    {Object.entries(groupFightsByBoss(reportData.fights)).map(
+  ([bossName, fights]: any, index: number) => (
+    <div
+      key={index}
+      className="rounded-2xl border border-white/10 bg-white/5 p-5"
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-bold">{bossName}</h3>
 
-    return (
-      <div
-        key={fight.id ?? index}
-        className="rounded-xl border border-white/10 bg-white/5 p-4"
-      >
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold">{fight.name}</h3>
-
-          <span className={fight.kill ? "text-green-400" : "text-red-400"}>
-            {fight.kill ? "Kill" : "Wipe"}
-          </span>
+          <p className="text-sm text-slate-400">
+            Pulls: {fights.length}
+          </p>
         </div>
 
-        <p className="text-sm text-slate-400">
-          Difficulty: {fight.difficulty} · Duration: {minutes}m {seconds}s
-        </p>
+        <div className="text-right">
+          <div className="text-sm text-slate-400">
+            Best Pull
+          </div>
+
+          <div className="font-semibold text-violet-300">
+          {(() => {
+  const bestFight = fights.reduce((best: any, current: any) => {
+    const bestDuration = best.endTime - best.startTime;
+    const currentDuration = current.endTime - current.startTime;
+
+    return currentDuration > bestDuration ? current : best;
+  });
+
+  const durationMs = bestFight.endTime - bestFight.startTime;
+
+  const totalSeconds = Math.floor(durationMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}m ${seconds}s`;
+})()}
+          </div>
+        </div>
       </div>
-    );
-  })}
+    </div>
+  )
+)}
     </div>
   </div>
 )}
