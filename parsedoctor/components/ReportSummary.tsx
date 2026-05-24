@@ -2,6 +2,13 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import {
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    XAxis,
+    Tooltip,
+  } from "recharts";
 
 export function ReportSummary({
     reportData,
@@ -14,6 +21,23 @@ export function ReportSummary({
 
     const [openBoss, setOpenBoss] = useState<string | null>(null);
 
+    const groupedFights = Object.entries(groupFightsByBoss(reportData.fights));
+
+    const chartData = groupedFights.map(([bossName, fights]: any) => {
+    const kills = fights.filter((f: any) => f.kill).length;
+    const wipes = fights.length - kills;
+
+    const score = Math.min(
+    100,
+    Math.max(0, 100 - wipes * 5 + (kills > 0 ? 10 : 0))
+  );
+
+  return {
+    name: bossName.length > 14 ? bossName.slice(0, 14) + "..." : bossName,
+    score,
+  };
+});
+
     return (
       <section className="mx-auto max-w-4xl px-6 py-10 text-white">
         <h2 className="text-3xl font-bold">{reportData.title}</h2>
@@ -21,7 +45,32 @@ export function ReportSummary({
         <p className="mt-2 text-slate-400">
           Owner: {reportData.owner.name}
         </p>
-  
+        
+        <div className="mb-8 h-64 rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div className="mb-4 text-lg font-semibold text-white">
+        Boss Score Overview
+        </div>
+
+        <div className="space-y-3">
+        {chartData.map((boss: any) => (
+            <div key={boss.name}>
+            <div className="mb-1 flex justify-between text-xs text-slate-400">
+                <span>{boss.name}</span>
+                <span>{boss.score}/100</span>
+            </div>
+
+            <div className="h-2 rounded-full bg-white/10">
+                <div
+                className="h-2 rounded-full bg-violet-500"
+                style={{ width: `${boss.score}%` }}
+                />
+            </div>
+            </div>
+        ))}
+        </div>
+
+        </div>
+
         <div className="mt-6 space-y-3">
           {Object.entries(groupFightsByBoss(reportData.fights)).map(
             ([bossName, fights]: any, index: number) => {
@@ -54,6 +103,16 @@ export function ReportSummary({
                         : wipes >= 5
                         ? "warning"
                         : "info";
+
+                        const chartData = [
+                            {
+                              name:
+                                bossName.length > 12
+                                  ? bossName.slice(0, 12) + "..."
+                                  : bossName,
+                              score,
+                            },
+                          ];
 
                         const severityLabel =
                             severity === "critical"
@@ -171,6 +230,7 @@ export function ReportSummary({
                                         </div>
                                         </div>
                                     </div>
+                                    
                                     </motion.div>
                                 )}
                                 </AnimatePresence>
