@@ -77,62 +77,10 @@ export default function ParseDoctorLanding() {
         </header>
 
         <main>
-        {reportData && (
-  <div className="mx-auto max-w-4xl px-6 py-10 text-white">
-    <h2 className="text-3xl font-bold">
-      {reportData.title}
-    </h2>
-
-    <p className="mt-2 text-slate-400">
-      Owner: {reportData.owner.name}
-    </p>
-
-    <div className="mt-6 space-y-3">
-    {Object.entries(groupFightsByBoss(reportData.fights)).map(
-  ([bossName, fights]: any, index: number) => (
-    <div
-      key={index}
-      className="rounded-2xl border border-white/10 bg-white/5 p-5"
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-xl font-bold">{bossName}</h3>
-
-          <p className="text-sm text-slate-400">
-            Pulls: {fights.length}
-          </p>
-        </div>
-
-        <div className="text-right">
-          <div className="text-sm text-slate-400">
-            Best Pull
-          </div>
-
-          <div className="font-semibold text-violet-300">
-          {(() => {
-  const bestFight = fights.reduce((best: any, current: any) => {
-    const bestDuration = best.endTime - best.startTime;
-    const currentDuration = current.endTime - current.startTime;
-
-    return currentDuration > bestDuration ? current : best;
-  });
-
-  const durationMs = bestFight.endTime - bestFight.startTime;
-  const totalSeconds = Math.floor(durationMs / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes}m ${seconds}s`;
-})()}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-)}
-    </div>
-  </div>
-)}
+        <ReportSummary
+  reportData={reportData}
+  groupFightsByBoss={groupFightsByBoss}
+/>
           <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 pb-20 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:pt-24">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -210,6 +158,7 @@ export default function ParseDoctorLanding() {
               </Card>
             </motion.div>
           </section>
+
           <ReportSummary
   reportData={reportData}
   groupFightsByBoss={groupFightsByBoss}
