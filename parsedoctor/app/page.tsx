@@ -117,7 +117,6 @@ export default function ParseDoctorLanding() {
   });
 
   const durationMs = bestFight.endTime - bestFight.startTime;
-
   const totalSeconds = Math.floor(durationMs / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
