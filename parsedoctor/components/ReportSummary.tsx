@@ -38,6 +38,15 @@ export function ReportSummary({
                     ? "Progression wall detected."
                     : "Early progression data.";
 
+                    const severity =
+                        kills > 0
+                        ? "stable"
+                        : wipes >= 20
+                        ? "critical"
+                        : wipes >= 5
+                        ? "warning"
+                        : "info";
+
                 const averageDurationMs =
                     fights.reduce((total: number, fight: any) => {
                     return total + (fight.endTime - fight.startTime);
@@ -93,8 +102,18 @@ export function ReportSummary({
                             style={{ width: progressWidth }}
                             />
                         </div>
-                        <div className="mt-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-slate-300">
-                            {diagnosis}
+                        <div
+                             className={`mt-3 rounded-xl border px-3 py-2 text-sm ${
+                                severity === "critical"
+                                ? "border-red-500/30 bg-red-500/10 text-red-200"
+                                : severity === "warning"
+                                ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-200"
+                                : severity === "stable"
+                                ? "border-green-500/30 bg-green-500/10 text-green-200"
+                                : "border-white/10 bg-black/20 text-slate-300"
+                                }`}
+                                >
+                                {diagnosis}
                             </div>
                     </div>
   
