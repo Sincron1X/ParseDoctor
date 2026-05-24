@@ -58,8 +58,16 @@ export function ReportSummary({
                         }
                       >
                         {status}
-                        <div className="text-sm font-bold text-violet-300">
-                            Score {score}/100
+                        <div
+                         className={`text-sm font-bold ${
+                         score >= 80
+                        ? "text-green-400"
+                        : score >= 50
+                        ? "text-yellow-400"
+                         : "text-red-400"
+                        }`}
+>
+                        Score {score}/100
                         </div>
                       </div>
   
