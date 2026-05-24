@@ -9,6 +9,18 @@ import { Button } from "@/components/ui/button";
 export default function ParseDoctorLanding() {
   const [mode, setMode] = useState("coach");
   const [logUrl, setLogUrl] = useState("");
+  const [reportData, setReportData] = useState<any>(null);
+  async function testConnection() {
+    const reportCode = "73qcmP4F8gYjQZXv";
+  
+    const response = await fetch(
+      `/api/report?code=${reportCode}`
+    );
+  
+    const data = await response.json();
+  
+    setReportData(data.data.reportData.report);
+  }
 
   return (
     <div className="min-h-screen bg-[#070812] text-white overflow-hidden">
@@ -33,6 +45,44 @@ export default function ParseDoctorLanding() {
         </header>
 
         <main>
+        {reportData && (
+  <div className="mx-auto max-w-4xl px-6 py-10 text-white">
+    <h2 className="text-3xl font-bold">
+      {reportData.title}
+    </h2>
+
+    <p className="mt-2 text-slate-400">
+      Owner: {reportData.owner.name}
+    </p>
+
+    <div className="mt-6 space-y-3">
+      {reportData.fights.map((fight: any, index: number) => (
+        <div
+          key={index}
+          className="rounded-xl border border-white/10 bg-white/5 p-4"
+        >
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold">{fight.name}</h3>
+
+            <span
+              className={
+                fight.kill
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              {fight.kill ? "Kill" : "Wipe"}
+            </span>
+          </div>
+
+          <p className="text-sm text-slate-400">
+            Difficulty: {fight.difficulty}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
           <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 pb-20 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:pt-24">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -61,7 +111,10 @@ export default function ParseDoctorLanding() {
                       className="h-14 w-full rounded-2xl border border-white/10 bg-black/40 pl-12 pr-4 text-sm outline-none ring-violet-500 transition focus:ring-2"
                     />
                   </div>
-                  <Button className="h-14 rounded-2xl bg-violet-600 px-8 text-base font-bold hover:bg-violet-500">
+                  <Button
+                    onClick={testConnection}
+                     className="h-14 rounded-2xl bg-violet-600 px-8 text-base font-bold hover:bg-violet-500"
+                  >
                     Analyze Logs
                   </Button>
                 </div>
