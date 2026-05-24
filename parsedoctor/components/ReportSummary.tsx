@@ -47,7 +47,7 @@ export function ReportSummary({
         </p>
         
         <div className="mb-8 h-64 rounded-2xl border border-white/10 bg-white/5 p-4">
-        <div className="mb-4 text-lg font-semibold text-white">
+        <div className="mb-4 text-lg font-semibold text-sm leading-relaxed text-white">
         Boss Score Overview
         </div>
 
@@ -123,6 +123,8 @@ export function ReportSummary({
                             ? "STABLE"
                             : "INFO";
 
+                        
+
                 const averageDurationMs =
                     fights.reduce((total: number, fight: any) => {
                     return total + (fight.endTime - fight.startTime);
@@ -131,6 +133,17 @@ export function ReportSummary({
                     const averageTotalSeconds = Math.floor(averageDurationMs / 1000);
                     const averageMinutes = Math.floor(averageTotalSeconds / 60);
                     const averageSeconds = averageTotalSeconds % 60;
+
+                    const recommendation =
+                            kills > 0
+                                ? "Boss is killable. Focus on consistency and clean reclears."
+                                : wipes >= 20 && averageMinutes < 2
+                                ? "Raid is dying too early. Review opening positioning, defensives and first mechanic execution."
+                                : wipes >= 20
+                                ? "High wipe wall. Review deaths, phase transitions and cooldown planning."
+                                : wipes >= 5
+                                ? "Progression is building. Keep collecting pulls and identify repeated mistakes."
+                                : "Not enough data yet. Upload more pulls for stronger analysis.";
   
               const bestFight = fights.reduce((best: any, current: any) => {
                 const bestDuration = best.endTime - best.startTime;
