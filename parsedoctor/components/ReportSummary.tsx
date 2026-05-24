@@ -39,6 +39,7 @@ export function ReportSummary({
                     : "Early progression data.";
 
                     const severity =
+                    
                         kills > 0
                         ? "stable"
                         : wipes >= 20
@@ -46,6 +47,15 @@ export function ReportSummary({
                         : wipes >= 5
                         ? "warning"
                         : "info";
+
+                        const severityLabel =
+                            severity === "critical"
+                            ? "CRITICAL"
+                            : severity === "warning"
+                            ? "WARNING"
+                            : severity === "stable"
+                            ? "STABLE"
+                            : "INFO";
 
                 const averageDurationMs =
                     fights.reduce((total: number, fight: any) => {
@@ -113,7 +123,11 @@ export function ReportSummary({
                                 : "border-white/10 bg-black/20 text-slate-300"
                                 }`}
                                 >
-                                {diagnosis}
+                                <div className="mb-1 text-[10px] font-bold tracking-widest opacity-70">
+                                    {severityLabel}
+                                    </div>
+
+                                    <div>{diagnosis}</div>
                             </div>
                     </div>
   
