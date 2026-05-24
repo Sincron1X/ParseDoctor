@@ -31,12 +31,24 @@ export function ReportSummary({
     100,
     Math.max(0, 100 - wipes * 5 + (kills > 0 ? 10 : 0))
   );
+  
+  
 
   return {
     name: bossName.length > 14 ? bossName.slice(0, 14) + "..." : bossName,
     score,
   };
 });
+    const raidScore =
+    chartData.length > 0
+    ? Math.round(
+        chartData.reduce(
+          (total: number, boss: any) => total + boss.score,
+          0
+        ) / chartData.length
+      )
+    : 0;
+    
 
     return (
       <section className="mx-auto max-w-4xl px-6 py-10 text-white">
@@ -45,6 +57,10 @@ export function ReportSummary({
         <p className="mt-2 text-slate-400">
           Owner: {reportData.owner.name}
         </p>
+
+        <div className="mt-4 inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-bold text-violet-300">
+        Raid Score: {raidScore}/100
+        </div>
         
         <div className="mb-8 h-64 rounded-2xl border border-white/10 bg-white/5 p-4">
         <div className="mb-4 text-lg font-semibold text-sm leading-relaxed text-white">
