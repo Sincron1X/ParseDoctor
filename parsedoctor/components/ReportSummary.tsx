@@ -21,6 +21,7 @@ export function ReportSummary({
               const kills = fights.filter((f: any) => f.kill).length;
               const wipes = fights.length - kills;
               const status = kills > 0 ? "Killed" : "Wiped";
+              const score = Math.min(100, Math.max(0, 100 - wipes * 5 + (kills > 0 ? 10 : 0)));
   
               const bestFight = fights.reduce((best: any, current: any) => {
                 const bestDuration = best.endTime - best.startTime;
@@ -57,6 +58,9 @@ export function ReportSummary({
                         }
                       >
                         {status}
+                        <div className="text-sm font-bold text-violet-300">
+                            Score {score}/100
+                        </div>
                       </div>
   
                       <div className="text-sm text-slate-400">Best Pull</div>
