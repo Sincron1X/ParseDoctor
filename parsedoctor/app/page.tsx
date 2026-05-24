@@ -71,30 +71,32 @@ export default function ParseDoctorLanding() {
     </p>
 
     <div className="mt-6 space-y-3">
-      {reportData.fights.map((fight: any, index: number) => (
-        <div
-          key={index}
-          className="rounded-xl border border-white/10 bg-white/5 p-4"
-        >
-          <div className="flex items-center justify-between">
-            <h3 className="font-bold">{fight.name}</h3>
+    {reportData.fights
+  .filter((fight: any) => fight.difficulty)
+  .map((fight: any, index: number) => {
+    const durationMs = fight.endTime - fight.startTime;
+    const minutes = Math.floor(durationMs / 60000);
+    const seconds = Math.floor((durationMs % 60000) / 1000);
 
-            <span
-              className={
-                fight.kill
-                  ? "text-green-400"
-                  : "text-red-400"
-              }
-            >
-              {fight.kill ? "Kill" : "Wipe"}
-            </span>
-          </div>
+    return (
+      <div
+        key={fight.id ?? index}
+        className="rounded-xl border border-white/10 bg-white/5 p-4"
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold">{fight.name}</h3>
 
-          <p className="text-sm text-slate-400">
-            Difficulty: {fight.difficulty}
-          </p>
+          <span className={fight.kill ? "text-green-400" : "text-red-400"}>
+            {fight.kill ? "Kill" : "Wipe"}
+          </span>
         </div>
-      ))}
+
+        <p className="text-sm text-slate-400">
+          Difficulty: {fight.difficulty} · Duration: {minutes}m {seconds}s
+        </p>
+      </div>
+    );
+  })}
     </div>
   </div>
 )}

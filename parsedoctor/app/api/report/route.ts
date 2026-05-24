@@ -52,10 +52,13 @@ export async function GET(request: Request) {
               owner {
                 name
               }
-              fights {
-                name
-                difficulty
-                kill
+              fights { 
+  id
+  name
+  difficulty
+  kill
+  startTime
+  endTime
               }
             }
           }
