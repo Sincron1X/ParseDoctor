@@ -29,6 +29,15 @@ export function ReportSummary({
 
                 const killRate = Math.round((kills / fights.length) * 100);
 
+                const diagnosis =
+                    kills > 0
+                    ? "Boss killed. Good execution."
+                    : wipes >= 20
+                    ? "High wipe count detected. Execution issue."
+                    : wipes >= 5
+                    ? "Progression wall detected."
+                    : "Early progression data.";
+
                 const averageDurationMs =
                     fights.reduce((total: number, fight: any) => {
                     return total + (fight.endTime - fight.startTime);
@@ -84,6 +93,9 @@ export function ReportSummary({
                             style={{ width: progressWidth }}
                             />
                         </div>
+                        <div className="mt-3 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-slate-300">
+                            {diagnosis}
+                            </div>
                     </div>
   
                     <div className="text-right">
