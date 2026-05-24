@@ -1,5 +1,6 @@
 "use client";
 
+import { ReportSummary } from "@/components/ReportSummary";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Activity, Brain, Skull, ShieldAlert, Zap, Search, Stethoscope, Sparkles } from "lucide-react";
@@ -209,7 +210,10 @@ export default function ParseDoctorLanding() {
               </Card>
             </motion.div>
           </section>
-
+          <ReportSummary
+  reportData={reportData}
+  groupFightsByBoss={groupFightsByBoss}
+/>
           <section id="features" className="mx-auto max-w-7xl px-6 py-20">
             <div className="mb-12 max-w-3xl">
               <h2 className="text-4xl font-black tracking-tight md:text-5xl">Built for raiders who want the truth.</h2>
