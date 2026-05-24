@@ -10,17 +10,32 @@ export default function ParseDoctorLanding() {
   const [mode, setMode] = useState("coach");
   const [logUrl, setLogUrl] = useState("");
   const [reportData, setReportData] = useState<any>(null);
-  async function testConnection() {
-    const reportCode = "73qcmP4F8gYjQZXv";
-  
-    const response = await fetch(
-      `/api/report?code=${reportCode}`
-    );
-  
-    const data = await response.json();
-  
-    setReportData(data.data.reportData.report);
+  function extractReportCode(url: string) {
+    const match = url.match(/reports\/([a-zA-Z0-9]+)/);
+    return match ? match[1] : null;
   }
+  
+  async function testConnection() {
+    const reportCode = extractReportCode(logUrl);
+  
+    if (!reportCode) {
+      alert("Please enter a valid Warcraft Logs URL.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`/api/report?code=${reportCode}`);
+      const data = await response.json();
+  
+      console.log("REPORT DATA:", data);
+  
+      setReportData(data.data.reportData.report);
+    } catch (error) {
+      console.error("Failed to fetch report:", error);
+      alert("Failed to fetch Warcraft Logs report.");
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-[#070812] text-white overflow-hidden">
