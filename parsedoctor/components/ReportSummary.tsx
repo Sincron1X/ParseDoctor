@@ -26,6 +26,17 @@ export function ReportSummary({
                 fights.length > 0 ? Math.round((kills / fights.length) * 100) : 0;
 
                 const progressWidth = `${progress}%`;
+
+                const killRate = Math.round((kills / fights.length) * 100);
+
+                const averageDurationMs =
+                    fights.reduce((total: number, fight: any) => {
+                    return total + (fight.endTime - fight.startTime);
+                    }, 0) / fights.length;
+
+                    const averageTotalSeconds = Math.floor(averageDurationMs / 1000);
+                    const averageMinutes = Math.floor(averageTotalSeconds / 60);
+                    const averageSeconds = averageTotalSeconds % 60;
   
               const bestFight = fights.reduce((best: any, current: any) => {
                 const bestDuration = best.endTime - best.startTime;
@@ -48,9 +59,19 @@ export function ReportSummary({
                     <div>
                       <h3 className="text-xl font-bold">{bossName}</h3>
   
-                      <p className="text-sm text-slate-400">
-                        Pulls: {fights.length} · Wipes: {wipes} · Kills: {kills}
-                      </p>
+                      <div className="text-sm text-slate-400 space-y-1">
+                        <div>
+                            Pulls: {fights.length} · Wipes: {wipes} · Kills: {kills}
+                                </div>
+
+                                 <div>
+                                     Avg Pull: {averageMinutes}m {averageSeconds}s
+                                     </div>
+
+                                    <div>
+                                        Kill Rate: {killRate}%
+                                        </div>
+                                            </div>
                       <div className="mt-3 h-2 w-56 rounded-full bg-white/10">
                       <div
                             className={`h-2 rounded-full ${
