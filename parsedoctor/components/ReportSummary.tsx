@@ -22,6 +22,10 @@ export function ReportSummary({
               const wipes = fights.length - kills;
               const status = kills > 0 ? "Killed" : "Wiped";
               const score = Math.min(100, Math.max(0, 100 - wipes * 5 + (kills > 0 ? 10 : 0)));
+              const progress =
+                fights.length > 0 ? Math.round((kills / fights.length) * 100) : 0;
+
+                const progressWidth = `${progress}%`;
   
               const bestFight = fights.reduce((best: any, current: any) => {
                 const bestDuration = best.endTime - best.startTime;
@@ -47,6 +51,18 @@ export function ReportSummary({
                       <p className="text-sm text-slate-400">
                         Pulls: {fights.length} · Wipes: {wipes} · Kills: {kills}
                       </p>
+                      <div className="mt-3 h-2 w-56 rounded-full bg-white/10">
+                      <div
+                            className={`h-2 rounded-full ${
+                            progress === 0
+                            ? "bg-red-500"
+                            : progress >= 100
+                            ? "bg-green-500"
+                            : "bg-yellow-400"
+                            }`}
+                            style={{ width: progressWidth }}
+                            />
+                        </div>
                     </div>
   
                     <div className="text-right">
@@ -66,7 +82,7 @@ export function ReportSummary({
                         ? "text-yellow-400"
                          : "text-red-400"
                         }`}
->
+                        >
                         Score {score}/100
                         </div>
                       </div>
