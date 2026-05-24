@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 export function ReportSummary({
     reportData,
     groupFightsByBoss,
@@ -6,7 +10,9 @@ export function ReportSummary({
     groupFightsByBoss: (fights: any[]) => Record<string, any[]>;
   }) {
     if (!reportData) return null;
-  
+
+    const [openBoss, setOpenBoss] = useState<string | null>(null);
+
     return (
       <section className="mx-auto max-w-4xl px-6 py-10 text-white">
         <h2 className="text-3xl font-bold">{reportData.title}</h2>
@@ -80,9 +86,10 @@ export function ReportSummary({
   
               return (
                 <div
-                  key={index}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-5"
-                >
+                    key={index}
+                    onClick={() => setOpenBoss(openBoss === bossName ? null : bossName)}
+                    className="cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-violet-500/40 hover:bg-white/10"
+                    >
                   <div className="flex items-center justify-between gap-6">
                     <div>
                       <h3 className="text-xl font-bold">{bossName}</h3>
@@ -128,7 +135,17 @@ export function ReportSummary({
                                     </div>
 
                                     <div>{diagnosis}</div>
-                            </div>
+                                    </div>
+
+                                    {openBoss === bossName && (
+                                    <div className="mt-4 rounded-xl border border-violet-500/20 bg-violet-500/10 p-4 text-sm text-slate-300">
+                                    <div className="font-bold text-violet-300">Boss Details</div>
+                                    <div className="mt-2">Total pulls analyzed: {fights.length}</div>
+                                    <div>Best pull duration: {minutes}m {seconds}s</div>
+                                    <div>Average pull duration: {averageMinutes}m {averageSeconds}s</div>
+                                    <div>Kill rate: {killRate}%</div>
+                                    </div>
+                                        )}
                     </div>
   
                     <div className="text-right">
