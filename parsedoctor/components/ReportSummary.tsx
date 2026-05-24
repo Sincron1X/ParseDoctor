@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 export function ReportSummary({
@@ -137,34 +138,42 @@ export function ReportSummary({
                                     <div>{diagnosis}</div>
                                     </div>
 
+                                    <AnimatePresence>
                                     {openBoss === bossName && (
-                                    <div className="mt-4 rounded-xl border border-violet-500/20 bg-violet-500/10 p-5 text-sm text-slate-300">
+                                    <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="mt-4 overflow-hidden rounded-xl border border-violet-500/20 bg-violet-500/10 p-5 text-sm text-slate-300 shadow-lg shadow-violet-950/30"
+                                    >
                                     <div className="font-bold text-violet-300">Boss Details</div>
 
                                     <div className="mt-3 grid gap-3 md:grid-cols-3">
-                                    <div>
-                                    <div className="text-[10px] uppercase tracking-widest text-slate-500">Top Issue</div>
-                                    <div className="font-semibold text-white">
-                                    {wipes >= 20 ? "Execution consistency" : "Limited data"}
-                                    </div>
-                                </div>
+                                        <div>
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-500">Top Issue</div>
+                                        <div className="font-semibold text-white">
+                                            {wipes >= 20 ? "Execution consistency" : "Limited data"}
+                                        </div>
+                                        </div>
 
-                                    <div>
-                                    <div className="text-[10px] uppercase tracking-widest text-slate-500">Recommendation</div>
-                                    <div className="font-semibold text-white">
-                                    {wipes >= 20 ? "Review deaths and phase transitions" : "Collect more pulls"}
-                                 </div>
-                                </div>
+                                        <div>
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-500">Recommendation</div>
+                                        <div className="font-semibold text-white">
+                                            {wipes >= 20 ? "Review deaths and phase transitions" : "Collect more pulls"}
+                                        </div>
+                                        </div>
 
-                                <div>
-                                    <div className="text-[10px] uppercase tracking-widest text-slate-500">Confidence</div>
-                                    <div className="font-semibold text-white">
-                                     {fights.length >= 10 ? "High" : "Low"}
+                                        <div>
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-500">Confidence</div>
+                                        <div className="font-semibold text-white">
+                                            {fights.length >= 10 ? "High" : "Low"}
+                                        </div>
+                                        </div>
                                     </div>
-                                    </div>
-                                    </div>
-                                    </div>
-                                        )}
+                                    </motion.div>
+                                )}
+                                </AnimatePresence>
                     </div>
   
                     <div className="text-right">
