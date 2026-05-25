@@ -241,6 +241,7 @@ export function ReportSummary({
                             style={{ width: progressWidth }}
                             />
                         </div>
+                        {openBoss === bossName && (
                         <div
                              className={`mt-3 rounded-xl border px-3 py-2 text-sm ${
                                 severity === "critical"
@@ -258,6 +259,7 @@ export function ReportSummary({
 
                                     <div>{diagnosis}</div>
                                     </div>
+                                    )}
 
                                     <AnimatePresence>
                                     {openBoss === bossName && (
