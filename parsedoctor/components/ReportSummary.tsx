@@ -22,6 +22,31 @@ export function ReportSummary({
     if (!reportData) return null;
 
     const [openBoss, setOpenBoss] = useState<string | null>(null);
+    const [aiSummary, setAiSummary] = useState<string | null>(null);
+    const [aiLoading, setAiLoading] = useState(false);
+    const generateAiSummary = async () => {
+      setAiLoading(true);
+    
+      try {
+        const response = await fetch("/api/ai-summary", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            raidScore,
+            bosses: chartData,
+          }),
+        });
+    
+        const data = await response.json();
+        setAiSummary(data.summary ?? "No AI summary generated.");
+      } catch {
+        setAiSummary("AI summary unavailable.");
+      } finally {
+        setAiLoading(false);
+      }
+    };
     const toggleBoss = (bossName: string) => {
       setOpenBoss(openBoss === bossName ? null : bossName);
     };
@@ -87,7 +112,14 @@ export function ReportSummary({
             <div className="mb-1 text-xs font-bold uppercase tracking-widest text-violet-300">
               AI Raid Summary
             </div>
-            {raidSummary}
+            {aiSummary ?? raidSummary}
+            <button
+              onClick={generateAiSummary}
+              disabled={aiLoading}
+              className="mt-3 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-bold text-violet-300 transition hover:bg-violet-500/20 disabled:opacity-50"
+            >
+              {aiLoading ? "Generating..." : "Generate AI Summary"}
+            </button>
           </div>
         
         
