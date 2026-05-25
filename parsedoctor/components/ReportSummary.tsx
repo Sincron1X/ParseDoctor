@@ -20,6 +20,9 @@ export function ReportSummary({
     if (!reportData) return null;
 
     const [openBoss, setOpenBoss] = useState<string | null>(null);
+    const toggleBoss = (bossName: string) => {
+      setOpenBoss(openBoss === bossName ? null : bossName);
+    };
 
     const groupedFights = Object.entries(groupFightsByBoss(reportData.fights));
 
@@ -206,7 +209,7 @@ export function ReportSummary({
               return (
                 <div
                     key={index}
-                    onClick={() => setOpenBoss(openBoss === bossName ? null : bossName)}
+                    onClick={() => toggleBoss(bossName)}
                     className="cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-violet-500/40 hover:bg-white/10"
                     >
                   <div className="flex items-center justify-between gap-6">
