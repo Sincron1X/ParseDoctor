@@ -321,6 +321,10 @@ export function ReportSummary({
                         }`}
                         >
                         Score {score}/100
+
+                        <div className="mt-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-widest text-slate-400">
+                          {openBoss === bossName ? "Click to collapse" : "Click to expand"}
+                          </div>
                         </div>
                       </div>
   
