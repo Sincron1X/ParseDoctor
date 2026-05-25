@@ -62,13 +62,13 @@ export function ReportSummary({
         Raid Score: {raidScore}/100
         </div>
         
-        <div className="mb-8 h-64 rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-4">
         <div className="mb-4 text-lg font-semibold text-sm leading-relaxed text-white">
         Boss Score Overview
         </div>
 
-        <div className="space-y-3">
-        {chartData.map((boss: any) => (
+        <div className="max-h-56 space-y-3 overflow-y-auto pr-2">
+            {chartData.map((boss: any) => (
             <div key={boss.name}>
             <div className="mb-1 flex justify-between text-xs text-slate-400">
                 <span>{boss.name}</span>
