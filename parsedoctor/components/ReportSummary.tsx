@@ -58,8 +58,16 @@ export function ReportSummary({
           Owner: {reportData.owner.name}
         </p>
 
-        <div className="mt-4 inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm font-bold text-violet-300">
-        Raid Score: {raidScore}/100
+        <div
+          className={`mt-4 inline-flex rounded-full border px-4 py-2 text-sm font-bold ${
+            raidScore < 50
+              ? "border-red-500/30 bg-red-500/10 text-red-300"
+              : raidScore < 80
+              ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-300"
+              : "border-green-500/30 bg-green-500/10 text-green-300"
+          }`}
+        >
+          Raid Score: {raidScore}/100
         </div>
         
         <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-4">
