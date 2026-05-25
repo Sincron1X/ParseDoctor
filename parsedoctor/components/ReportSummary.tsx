@@ -1,6 +1,6 @@
 "use client";
 
-
+import ReactMarkdown from "react-markdown";
 import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
@@ -112,7 +112,24 @@ export function ReportSummary({
             <div className="mb-1 text-xs font-bold uppercase tracking-widest text-violet-300">
               AI Raid Summary
             </div>
-            {aiSummary ?? raidSummary}
+            <ReactMarkdown
+                components={{
+                  p: ({ children }) => (
+                    <p className="mb-2 leading-relaxed text-slate-300">{children}</p>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className="font-bold text-white">{children}</strong>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="ml-4 list-disc space-y-1">{children}</ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="text-slate-300">{children}</li>
+                  ),
+                }}
+              >
+                {aiSummary ?? raidSummary}
+              </ReactMarkdown>
             <button
               onClick={generateAiSummary}
               disabled={aiLoading}
