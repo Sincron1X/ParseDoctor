@@ -38,7 +38,7 @@ export function ReportSummary({
     name: bossName.length > 14 ? bossName.slice(0, 14) + "..." : bossName,
     score,
   };
-});
+    }).sort((a: any, b: any) => a.score - b.score);
     const raidScore =
     chartData.length > 0
     ? Math.round(
@@ -77,7 +77,13 @@ export function ReportSummary({
 
             <div className="h-2 rounded-full bg-white/10">
                 <div
-                className="h-2 rounded-full bg-violet-500"
+                className={`h-2 rounded-full ${
+                  boss.score < 50
+                    ? "bg-red-500"
+                    : boss.score < 80
+                    ? "bg-yellow-400"
+                    : "bg-green-500"
+                }`}
                 style={{ width: `${boss.score}%` }}
                 />
             </div>
