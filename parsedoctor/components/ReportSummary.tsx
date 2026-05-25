@@ -48,6 +48,15 @@ export function ReportSummary({
         ) / chartData.length
       )
     : 0;
+
+    const raidSummary =
+    raidScore >= 90
+      ? "Strong raid performance. Most bosses look stable, with only minor execution gaps."
+      : raidScore >= 70
+      ? "Solid progression, but several fights still show consistency issues."
+      : raidScore >= 50
+      ? "Raid is unstable. Focus on repeated wipes, deaths, and mechanic execution."
+      : "Critical raid performance. Major execution problems detected across multiple bosses.";
     
 
     return (
@@ -69,6 +78,13 @@ export function ReportSummary({
         >
           Raid Score: {raidScore}/100
         </div>
+        <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+            <div className="mb-1 text-xs font-bold uppercase tracking-widest text-violet-300">
+              AI Raid Summary
+            </div>
+            {raidSummary}
+          </div>
+        
         
         <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-4">
         <div className="mb-4 text-lg font-semibold text-sm leading-relaxed text-white">
