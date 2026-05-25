@@ -1,5 +1,7 @@
 "use client";
 
+
+import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import {
@@ -323,7 +325,20 @@ export function ReportSummary({
                         Score {score}/100
 
                         <div className="mt-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-widest text-slate-400">
-                          {openBoss === bossName ? "Click to collapse" : "Click to expand"}
+                        <div className="flex items-center gap-1">
+                              <ChevronDown
+                                size={12}
+                                className={`transition-transform duration-200 ${
+                                  openBoss === bossName ? "rotate-180" : ""
+                                }`}
+                              />
+
+                              <span>
+                                {openBoss === bossName
+                                  ? "Click to collapse"
+                                  : "Click to expand"}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
