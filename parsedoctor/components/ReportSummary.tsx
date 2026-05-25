@@ -261,6 +261,7 @@ export function ReportSummary({
                                     </div>
                                     )}
 
+                                    {openBoss === bossName && (
                                     <AnimatePresence>
                                     {openBoss === bossName && (
                                     <motion.div
@@ -298,6 +299,7 @@ export function ReportSummary({
                                     </motion.div>
                                 )}
                                 </AnimatePresence>
+                                )}
                     </div>
   
                     <div className="text-right">
