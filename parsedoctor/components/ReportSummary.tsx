@@ -86,6 +86,38 @@ export function ReportSummary({
           index === self.findIndex((p: any) => p.name === player.name)
       );
 
+      const getPlayersForFight = (fightName: string) => {
+        const fightRanking = rankings.find((fight: any) => {
+          const rankingName = fight.name?.toLowerCase() ?? "";
+          const cardName = fightName.toLowerCase();
+        
+          return (
+            rankingName === cardName ||
+            cardName.includes(rankingName) ||
+            rankingName.includes(cardName)
+          );
+        });
+
+        if (!fightRanking) return [];
+
+            console.log("FIGHT ROLES:", fightRanking.roles);
+             
+      
+        return [
+          ...(fightRanking.roles?.tanks?.characters ?? []).map((p: any) => ({
+            ...p,
+            role: "tank",
+          })),
+          ...(fightRanking.roles?.healers?.characters ?? []).map((p: any) => ({
+            ...p,
+            role: "healer",
+          })),
+          ...(fightRanking.roles?.dps?.characters ?? []).map((p: any) => ({
+            ...p,
+            role: "dps",
+          })),
+        ];
+      };
 
     const chartData = groupedFights.map(([bossName, fights]: any) => {
     const kills = fights.filter((f: any) => f.kill).length;
@@ -211,7 +243,7 @@ export function ReportSummary({
 
           
           
-          <div className="grid gap-2 md:grid-cols-2">
+          <div className="max-h-80 overflow-y-auto pr-2 grid gap-2 md:grid-cols-2">
             {uniquePlayers.map((player: any) => (
               <div
                 key={`${player.name}-${player.spec}`}
@@ -235,6 +267,7 @@ export function ReportSummary({
               const kills = fights.filter((f: any) => f.kill).length;
               const wipes = fights.length - kills;
               const status = kills > 0 ? "Killed" : "Wiped";
+              const fightPlayers = getPlayersForFight(bossName);
               const score = Math.min(100, Math.max(0, 100 - wipes * 5 + (kills > 0 ? 10 : 0)));
               const progress =
                 fights.length > 0 ? Math.round((kills / fights.length) * 100) : 0;
@@ -404,9 +437,37 @@ export function ReportSummary({
                                         </div>
                                         </div>
                                     </div>
+                                    <div className="mt-4">
+                                      <div className="mb-2 text-xs font-bold uppercase tracking-widest text-violet-300">
+                                      Fight Players ({fightPlayers.length})
+                                      </div>
+
+                                      <div className="grid gap-2 md:grid-cols-2">
+                                        {fightPlayers.map((player: any) => (
+                                          <div
+                                            key={`${bossName}-${player.name}`}
+                                            className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs"
+                                          >
+                                            <div className="font-bold text-white">
+                                              {player.name}
+                                            </div>
+
+                                            <div className="text-slate-400">
+                                              {player.spec ?? "Unknown Spec"} • {player.role}
+                                            </div>
+
+                                            <div className="text-violet-300">
+                                              Parse: {player.rankPercent ?? "N/A"}
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
                                     
                                     </motion.div>
+                                    
                                 )}
+                                
                                 </AnimatePresence>
                                 )}
                     </div>
