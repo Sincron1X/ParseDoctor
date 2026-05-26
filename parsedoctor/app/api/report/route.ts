@@ -52,13 +52,24 @@ export async function GET(request: Request) {
               owner {
                 name
               }
+                masterData {
+                  actors {
+                    id
+                    name
+                    type
+                    subType
+                  }
+                }
+
+                rankings
+
               fights { 
-  id
-  name
-  difficulty
-  kill
-  startTime
-  endTime
+                id
+                name
+                difficulty
+                kill
+                startTime
+                endTime
               }
             }
           }
@@ -89,6 +100,17 @@ export async function GET(request: Request) {
 
     const reportData = JSON.parse(reportText);
 
+
+    console.log("MASTERDATA:", reportData?.data?.reportData?.report?.masterData);
+    console.log("RANKINGS:", reportData?.data?.reportData?.report?.rankings);
+    console.log("REPORT DATA:", JSON.stringify(reportData, null, 2));
+    const report = reportData?.data?.reportData?.report;
+
+    console.log("ACTORS COUNT:", report?.masterData?.actors?.length);
+    console.log("FIRST ACTOR:", report?.masterData?.actors?.[0]);
+    console.log("RANKINGS TYPE:", typeof report?.rankings);
+    console.log("RANKINGS PREVIEW:", JSON.stringify(report?.rankings)?.slice(0, 500));
+    
     return Response.json(reportData);
   } catch (error) {
     return Response.json(

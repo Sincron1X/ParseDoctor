@@ -53,6 +53,40 @@ export function ReportSummary({
 
     const groupedFights = Object.entries(groupFightsByBoss(reportData.fights));
 
+    console.log("FULL RANKINGS:", reportData.rankings);
+
+    const rankings = reportData.rankings?.data ?? [];
+
+    const players = rankings
+      .flatMap((fight: any) => [
+        ...(fight.roles?.tanks?.characters ?? []).map((p: any) => ({
+          ...p,
+          role: "tank",
+        })),
+        ...(fight.roles?.healers?.characters ?? []).map((p: any) => ({
+          ...p,
+          role: "healer",
+        })),
+        ...(fight.roles?.dps?.characters ?? []).map((p: any) => ({
+          ...p,
+          role: "dps",
+        })),
+      ])
+      .map((character: any) => ({
+        name: character.name,
+        class: character.class,
+        spec: character.spec,
+        role: character.role,
+        rankPercent: character.rankPercent,
+      }))
+      .filter((player: any) => player.name);
+
+      const uniquePlayers = players.filter(
+        (player: any, index: number, self: any[]) =>
+          index === self.findIndex((p: any) => p.name === player.name)
+      );
+
+
     const chartData = groupedFights.map(([bossName, fights]: any) => {
     const kills = fights.filter((f: any) => f.kill).length;
     const wipes = fights.length - kills;
@@ -169,6 +203,30 @@ export function ReportSummary({
         ))}
         </div>
 
+        </div>
+                <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="mb-4 text-lg font-semibold text-white">
+            Players Detected
+          </div>
+
+          
+          
+          <div className="grid gap-2 md:grid-cols-2">
+            {uniquePlayers.map((player: any) => (
+              <div
+                key={`${player.name}-${player.spec}`}
+                className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm"
+              >
+                <div className="font-bold text-white">{player.name}</div>
+                <div className="text-slate-400">
+                  {player.spec ?? "Unknown spec"} {player.class ?? ""}
+                </div>
+                <div className="text-violet-300">
+                  Parse: {player.rankPercent ?? "N/A"}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="mt-6 space-y-3">
