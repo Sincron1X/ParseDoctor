@@ -53,7 +53,7 @@ export function ReportSummary({
 
     const groupedFights = Object.entries(groupFightsByBoss(reportData.fights));
 
-    console.log("FULL RANKINGS:", reportData.rankings);
+    
 
     const rankings = reportData.rankings?.data ?? [];
 
@@ -100,23 +100,23 @@ export function ReportSummary({
 
         if (!fightRanking) return [];
 
-            console.log("FIGHT ROLES:", fightRanking.roles);
+            
              
       
-        return [
-          ...(fightRanking.roles?.tanks?.characters ?? []).map((p: any) => ({
-            ...p,
-            role: "tank",
-          })),
-          ...(fightRanking.roles?.healers?.characters ?? []).map((p: any) => ({
-            ...p,
-            role: "healer",
-          })),
-          ...(fightRanking.roles?.dps?.characters ?? []).map((p: any) => ({
-            ...p,
-            role: "dps",
-          })),
-        ];
+            return [
+              ...(fightRanking.roles?.tanks?.characters ?? []).map((p: any) => ({
+                ...p,
+                role: "tank",
+              })),
+              ...(fightRanking.roles?.healers?.characters ?? []).map((p: any) => ({
+                ...p,
+                role: "healer",
+              })),
+              ...(fightRanking.roles?.dps?.characters ?? []).map((p: any) => ({
+                ...p,
+                role: "dps",
+              })),
+            ].sort((a: any, b: any) => (b.rankPercent ?? 0) - (a.rankPercent ?? 0));
       };
 
     const chartData = groupedFights.map(([bossName, fights]: any) => {
