@@ -23,9 +23,12 @@ export function ReportSummary({
 
     const [openBoss, setOpenBoss] = useState<string | null>(null);
     const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
+    const [playerAnalysis, setPlayerAnalysis] = useState<string | null>(null);
+    const [playerAnalysisLoading, setPlayerAnalysisLoading] = useState(false);
     const [aiSummary, setAiSummary] = useState<string | null>(null);
     const [aiLoading, setAiLoading] = useState(false);
     const generateAiSummary = async () => {
+      
       setAiLoading(true);
     
       try {
@@ -39,7 +42,7 @@ export function ReportSummary({
             bosses: chartData,
           }),
         });
-    
+        
         const data = await response.json();
         setAiSummary(data.summary ?? "No AI summary generated.");
       } catch {
@@ -50,6 +53,37 @@ export function ReportSummary({
     };
     const toggleBoss = (bossName: string) => {
       setOpenBoss(openBoss === bossName ? null : bossName);
+    };
+
+    const generatePlayerAnalysis = async (
+      player: any,
+      bossName: string,
+      fightPlayers: any[]
+    ) => {
+      setPlayerAnalysisLoading(true);
+      setPlayerAnalysis(null);
+    
+      try {
+        const response = await fetch("/api/ai-summary", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "player-analysis",
+            bossName,
+            player,
+            fightPlayers,
+          }),
+        });
+    
+        const data = await response.json();
+        setPlayerAnalysis(data.summary ?? "No player analysis generated.");
+      } catch {
+        setPlayerAnalysis("AI player analysis unavailable.");
+      } finally {
+        setPlayerAnalysisLoading(false);
+      }
     };
 
     const groupedFights = Object.entries(groupFightsByBoss(reportData.fights));
@@ -450,6 +484,7 @@ export function ReportSummary({
                                           onClick={(event) => {
                                             event.stopPropagation();
                                             setSelectedPlayer(player);
+                                            generatePlayerAnalysis(player, bossName, fightPlayers);
                                           }}
                                           className="cursor-pointer rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs transition hover:border-violet-500/40 hover:bg-white/10"
                                         >
@@ -493,7 +528,28 @@ export function ReportSummary({
                                         </div>
 
                                         <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-slate-300">
-                                          AI player analysis coming soon...
+                                        {playerAnalysisLoading ? (
+                                            "Generating player analysis..."
+                                          ) : (
+                                            <ReactMarkdown
+                                              components={{
+                                                p: ({ children }) => (
+                                                  <p className="mb-2 leading-relaxed text-slate-300">{children}</p>
+                                                ),
+                                                strong: ({ children }) => (
+                                                  <strong className="font-bold text-white">{children}</strong>
+                                                ),
+                                                ul: ({ children }) => (
+                                                  <ul className="ml-4 list-disc space-y-1">{children}</ul>
+                                                ),
+                                                li: ({ children }) => (
+                                                  <li className="text-slate-300">{children}</li>
+                                                ),
+                                              }}
+                                            >
+                                              {playerAnalysis ?? "Click a player to generate AI analysis."}
+                                            </ReactMarkdown>
+                                          )}
                                         </div>
                                       </div>
                                     )}
