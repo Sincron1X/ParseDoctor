@@ -22,6 +22,7 @@ export function ReportSummary({
     if (!reportData) return null;
 
     const [openBoss, setOpenBoss] = useState<string | null>(null);
+    const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
     const [aiSummary, setAiSummary] = useState<string | null>(null);
     const [aiLoading, setAiLoading] = useState(false);
     const generateAiSummary = async () => {
@@ -443,11 +444,15 @@ export function ReportSummary({
                                       </div>
 
                                       <div className="grid gap-2 md:grid-cols-2">
-                                        {fightPlayers.map((player: any) => (
+                                        {fightPlayers.map((player: any) => (                                         
                                           <div
-                                            key={`${bossName}-${player.name}`}
-                                            className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs"
-                                          >
+                                          key={`${bossName}-${player.name}`}
+                                          onClick={(event) => {
+                                            event.stopPropagation();
+                                            setSelectedPlayer(player);
+                                          }}
+                                          className="cursor-pointer rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs transition hover:border-violet-500/40 hover:bg-white/10"
+                                        >
                                             <div className="font-bold text-white">
                                               {player.name}
                                             </div>
@@ -463,6 +468,35 @@ export function ReportSummary({
                                         ))}
                                       </div>
                                     </div>
+                                    {selectedPlayer && (
+                                      <div className="mt-4 rounded-2xl border border-violet-500/20 bg-violet-500/10 p-4">
+                                        <div className="flex items-center justify-between">
+                                          <div>
+                                            <div className="text-lg font-bold text-white">
+                                              {selectedPlayer.name}
+                                            </div>
+
+                                            <div className="text-sm text-slate-400">
+                                              {selectedPlayer.spec} • {selectedPlayer.role}
+                                            </div>
+                                          </div>
+
+                                          <div className="text-right">
+                                            <div className="text-xs uppercase tracking-widest text-slate-500">
+                                              Parse
+                                            </div>
+
+                                            <div className="text-2xl font-bold text-violet-300">
+                                              {selectedPlayer.rankPercent ?? "N/A"}
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-slate-300">
+                                          AI player analysis coming soon...
+                                        </div>
+                                      </div>
+                                    )}
                                     
                                     </motion.div>
                                     
